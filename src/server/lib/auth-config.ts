@@ -99,13 +99,16 @@ export function parseAuthConfig(env: Env): AuthConfig {
   const warnings: string[] = [];
   const oidc = parseOidc(env, warnings);
   const magicLink = read(env, 'EMAIL_SERVER_HOST') !== '';
+  // Local fix: the login page now has a Google button, so Google counts as a
+  // sign-in method that password login can be disabled in favor of.
+  const google = read(env, 'GOOGLE_CLIENT_ID') !== '' && read(env, 'GOOGLE_CLIENT_SECRET') !== '';
 
   let passwordLogin = !parseBoolean(env, 'DISABLE_PASSWORD_LOGIN', false, warnings);
   // Refuse to disable password login when no other sign-in method is
   // configured. (Whether existing accounts can use it is up to the admin; see
-  // README.) Google doesn't count: the login page has no Google button.
-  if (!passwordLogin && !oidc && !magicLink) {
-    warnings.push('DISABLE_PASSWORD_LOGIN is ignored: neither OIDC nor magic link sign-in is configured.');
+  // README.)
+  if (!passwordLogin && !oidc && !magicLink && !google) {
+    warnings.push('DISABLE_PASSWORD_LOGIN is ignored: neither OIDC, magic link nor Google sign-in is configured.');
     passwordLogin = true;
   }
 
