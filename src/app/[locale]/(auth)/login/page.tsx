@@ -1,7 +1,7 @@
 'use client';
 
-import { Suspense, useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { Suspense, useEffect, useState } from 'react';
+import { getProviders, signIn } from 'next-auth/react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { Link, useRouter } from '@/i18n/navigation';
@@ -49,6 +49,20 @@ function LoginForm() {
   const [magicLinkSending, setMagicLinkSending] = useState(false);
   const [showMagicLink, setShowMagicLink] = useState(false);
   const [oidcRedirecting, setOidcRedirecting] = useState(false);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
+  const [googleRedirecting, setGoogleRedirecting] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    getProviders()
+      .then((providers) => {
+        if (active) setGoogleEnabled(Boolean(providers?.google));
+      })
+      .catch(() => {
+        // Keep the existing login methods usable if provider discovery fails.
+      });
+    return () => { active = false; };
+  }, []);
   const loginOptions = trpc.auth.getLoginOptions.useQuery();
   // Quick Split needs uploads; hide its link only once we know guests are refused.
   const guestUploadStatus = trpc.guest.getUploadStatus.useQuery();
@@ -111,6 +125,17 @@ function LoginForm() {
     }
   }
 
+  async function handleGoogle() {
+    setError('');
+    setGoogleRedirecting(true);
+    try {
+      await signIn('google', { redirectTo: callbackPath });
+    } catch {
+      setGoogleRedirecting(false);
+      setError(t('errors.generic'));
+    }
+  }
+
   async function handleOidc() {
     setError('');
     setOidcRedirecting(true);
@@ -167,6 +192,22 @@ function LoginForm() {
               >
                 {shownError}
               </div>
+            )}
+
+            {googleEnabled && (
+              <>
+                <Button
+                  data-testid="google-sign-in"
+                  variant={passwordLogin || magicLinkOnly || oidc ? 'outline' : 'default'}
+                  className="w-full rounded-full h-10 text-sm font-medium"
+                  onClick={handleGoogle}
+                  disabled={googleRedirecting}
+                >
+                  <KeyRound className="mr-2 h-4 w-4" />
+                  {t('sso', { provider: 'Google' })}
+                </Button>
+                {(passwordLogin || magicLinkOnly || oidc) && <OrDivider label={t('or')} />}
+              </>
             )}
 
             {oidc && (

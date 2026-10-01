@@ -36,3 +36,8 @@ demo
 eng.traineddata
 *.md
 !README.md
+
+# Local deployment artifacts must never enter the image
+pre-deployment-inspect.json
+gcreds.json
+*.env
