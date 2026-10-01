@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { InviteDialog } from '@/components/groups/invite-dialog';
 import { SettleDialog } from '@/components/groups/settle-dialog';
 import { getInitials, avatarColor } from '@/lib/avatar';
+import { APP_NAME } from '@/lib/brand';
 
 export default function GroupDetailPage({ params }: { params: Promise<{ groupId: string }> }) {
   const { groupId } = use(params);
@@ -193,7 +194,7 @@ export default function GroupDetailPage({ params }: { params: Promise<{ groupId:
                 to?.venmoUsername &&
                 isValidVenmoHandle(to.venmoUsername);
               const venmoUrl = showVenmo
-                ? buildVenmoPayUrl(to.venmoUsername!, debt.amount, `ShareTab: ${g.name}`)
+                ? buildVenmoPayUrl(to.venmoUsername!, debt.amount, `${APP_NAME}: ${g.name}`)
                 : null;
               return (
                 <div key={i} className="flex items-center gap-2">

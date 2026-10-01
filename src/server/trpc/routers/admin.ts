@@ -39,6 +39,7 @@ import {
 
 import { getBuildInfo } from '@/server/lib/build-info';
 import { isGuestUploadsForcedOff, readGuestUploadsSetting, saveGuestUploadsSetting } from '@/server/lib/guest-uploads';
+import { APP_NAME } from '@/lib/brand';
 
 // How long a successful Meridian login waits for the proxy start attempt.
 const MERIDIAN_LOGIN_START_WAIT_MS = 15_000;
@@ -871,19 +872,19 @@ export const adminRouter = createTRPCRouter({
       },
     });
 
-    const from = process.env.EMAIL_FROM ?? 'ShareTab <noreply@sharetab.local>';
+    const from = process.env.EMAIL_FROM ?? `${APP_NAME} <noreply@split.local>`;
     const to = ctx.user.email!;
 
     try {
       await transport.sendMail({
         from,
         to,
-        subject: 'ShareTab Test Email',
-        text: `This is a test email from ShareTab admin dashboard.\n\nSent at: ${new Date().toISOString()}\nAdmin: ${ctx.user.email}`,
+        subject: `${APP_NAME} Test Email`,
+        text: `This is a test email from ${APP_NAME} admin dashboard.\n\nSent at: ${new Date().toISOString()}\nAdmin: ${ctx.user.email}`,
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-            <h2 style="color: #10b981;">ShareTab Test Email</h2>
-            <p>This is a test email from the ShareTab admin dashboard.</p>
+            <h2 style="color: #10b981;">${APP_NAME} Test Email</h2>
+            <p>This is a test email from the ${APP_NAME} admin dashboard.</p>
             <p style="color: #666; font-size: 14px;">
               Sent at: ${new Date().toISOString()}<br/>
               Admin: ${ctx.user.email}

@@ -17,6 +17,7 @@ import {
 } from './lib/oidc-sign-in';
 import { authorizePasswordLogin } from './lib/password-login';
 import { findUserByEmail } from './lib/user-email';
+import { APP_NAME } from '@/lib/brand';
 
 const authConfig = parseAuthConfig(process.env);
 for (const warning of authConfig.warnings) {
@@ -81,7 +82,7 @@ if (authConfig.magicLink) {
           ...(process.env.EMAIL_SERVER_PASSWORD !== undefined ? { pass: process.env.EMAIL_SERVER_PASSWORD } : {}),
         },
       },
-      from: process.env.EMAIL_FROM ?? 'ShareTab <noreply@sharetab.local>',
+      from: process.env.EMAIL_FROM ?? `${APP_NAME} <noreply@split.local>`,
     }),
   );
 }

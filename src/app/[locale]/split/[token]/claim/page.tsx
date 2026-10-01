@@ -41,6 +41,7 @@ import { toast } from 'sonner';
 import { Link } from '@/i18n/navigation';
 import { buildVenmoPayUrl, isValidVenmoHandle } from '@/lib/venmo';
 import { getInitials, guestAvatarColor } from '@/lib/avatar';
+import { APP_NAME } from '@/lib/brand';
 
 function getStoredClaimIdentity(token: string): StoredClaimIdentity | null {
   if (typeof window === 'undefined') return null;
@@ -800,7 +801,7 @@ export default function ClaimPage({ params }: { params: Promise<{ token: string 
                         href={buildVenmoPayUrl(
                           venmoHandle,
                           person.total,
-                          `ShareTab: ${data.receiptData.merchantName ?? 'Bill split'}`,
+                          `${APP_NAME}: ${data.receiptData.merchantName ?? 'Bill split'}`,
                         )!}
                         target="_blank"
                         rel="noopener noreferrer"

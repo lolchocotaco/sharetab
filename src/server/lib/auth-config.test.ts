@@ -138,12 +138,18 @@ describe('parseAuthConfig', () => {
     expect(config.passwordLogin).toBe(false);
   });
 
-  test('DISABLE_PASSWORD_LOGIN is ignored when only Google is configured (no Google button on the login page)', () => {
+  test('DISABLE_PASSWORD_LOGIN turns password login off when only Google is configured', () => {
     const config = parseAuthConfig({
       GOOGLE_CLIENT_ID: 'id',
       GOOGLE_CLIENT_SECRET: 'secret',
       DISABLE_PASSWORD_LOGIN: 'true',
     });
+    expect(config.passwordLogin).toBe(false);
+    expect(config.warnings).toHaveLength(0);
+  });
+
+  test('DISABLE_PASSWORD_LOGIN is ignored when Google is only partially configured', () => {
+    const config = parseAuthConfig({ GOOGLE_CLIENT_ID: 'id', DISABLE_PASSWORD_LOGIN: 'true' });
     expect(config.passwordLogin).toBe(true);
     expect(config.warnings).toHaveLength(1);
   });

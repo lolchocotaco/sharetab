@@ -10,6 +10,7 @@ import { LayoutDashboard, Users, Receipt, LogOut, Settings, Shield, Menu, Scisso
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { LanguageSwitcher } from '@/components/layout/language-switcher';
 import { useTranslations, useLocale } from 'next-intl';
+import { APP_NAME } from '@/lib/brand';
 
 const navItems = [
   { href: '/dashboard', key: 'dashboard', icon: LayoutDashboard },
@@ -29,7 +30,7 @@ export function MobileHeader({ isAdmin }: { isAdmin?: boolean }) {
     <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border/60 bg-background/80 px-4 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 lg:hidden">
       <div className="flex items-center gap-2.5">
         <Receipt className="h-5 w-5 text-primary drop-shadow-sm" />
-        <span className="text-lg font-bold tracking-wide">ShareTab</span>
+        <span className="text-lg font-bold tracking-wide">{APP_NAME}</span>
       </div>
 
       <Sheet open={open} onOpenChange={setOpen}>
@@ -40,7 +41,7 @@ export function MobileHeader({ isAdmin }: { isAdmin?: boolean }) {
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2.5">
               <Receipt className="h-5 w-5 text-primary drop-shadow-sm" />
-              <span className="tracking-wide">ShareTab</span>
+              <span className="tracking-wide">{APP_NAME}</span>
             </SheetTitle>
           </SheetHeader>
           <nav className="mt-6 space-y-1">

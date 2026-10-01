@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { Link } from '@/i18n/navigation';
 import { getInitials, guestAvatarColor } from '@/lib/avatar';
 import { buildVenmoPayUrl, isValidVenmoHandle } from '@/lib/venmo';
+import { APP_NAME } from '@/lib/brand';
 
 export default function SharedSplitPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = use(params);
@@ -217,7 +218,7 @@ export default function SharedSplitPage({ params }: { params: Promise<{ token: s
                       href={buildVenmoPayUrl(
                         venmoHandle,
                         person.total,
-                        `ShareTab: ${data.receiptData.merchantName ?? t('billSplit')}`,
+                        `${APP_NAME}: ${data.receiptData.merchantName ?? t('billSplit')}`,
                       )!}
                       target="_blank"
                       rel="noopener noreferrer"

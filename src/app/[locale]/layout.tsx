@@ -7,6 +7,7 @@ import { Providers } from '@/components/providers';
 import { Toaster } from '@/components/ui/sonner';
 import { routing, rtlLocales } from '@/i18n/routing';
 import type { Locale } from '@/i18n/routing';
+import { APP_NAME } from '@/lib/brand';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -21,13 +22,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ShareTab',
+  title: APP_NAME,
   description: 'Self-hosted expense splitting with AI receipt scanning',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ShareTab',
+    title: APP_NAME,
   },
 };
 

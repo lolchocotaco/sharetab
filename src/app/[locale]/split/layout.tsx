@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation';
 import { Receipt } from 'lucide-react';
 import { auth } from '@/server/auth';
+import { APP_NAME } from '@/lib/brand';
 
 export default async function SplitLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -12,7 +13,7 @@ export default async function SplitLayout({ children }: { children: React.ReactN
         <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
           <Link href="/split" className="flex items-center gap-2 font-bold text-lg">
             <Receipt className="h-5 w-5 text-primary" />
-            <span>ShareTab</span>
+            <span>{APP_NAME}</span>
           </Link>
           {session?.user ? (
             <Link href="/dashboard" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
