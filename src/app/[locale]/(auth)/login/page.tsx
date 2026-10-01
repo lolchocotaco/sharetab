@@ -61,7 +61,9 @@ function LoginForm() {
       .catch(() => {
         // Keep the existing login methods usable if provider discovery fails.
       });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, []);
   const loginOptions = trpc.auth.getLoginOptions.useQuery();
   // Quick Split needs uploads; hide its link only once we know guests are refused.
