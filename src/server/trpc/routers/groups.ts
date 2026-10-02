@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server';
 import type { PrismaClient } from '@/generated/prisma/client';
 import { createTRPCRouter, protectedProcedure, groupMemberProcedure } from '../init';
 import { stripUndefined } from '../../lib/strip-undefined';
+import { isInviteRedeemable } from '../../lib/group-invite';
 
 export const groupsRouter = createTRPCRouter({
   list: protectedProcedure.query(async ({ ctx }) => {
@@ -248,7 +249,7 @@ export const groupsRouter = createTRPCRouter({
     const invite = await ctx.db.groupInvite.findUnique({
       where: { token: input.token },
     });
-    if (!invite || invite.usedAt || invite.expiresAt < new Date()) {
+    if (!invite || !isInviteRedeemable(invite)) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Invalid or expired invite' });
     }
 
@@ -259,8 +260,9 @@ export const groupsRouter = createTRPCRouter({
     });
     if (existing) {
       // Intentional: invite links are reusable for navigation purposes.
-      // usedAt/usedById only track the first redemption that creates a membership.
-      // An already-member user can still use the link to navigate to the group.
+      // usedAt/usedById track the most recent redemption that created a
+      // membership. An already-member user can still use the link to navigate
+      // to the group.
       return { groupId: invite.groupId, alreadyMember: true };
     }
 
